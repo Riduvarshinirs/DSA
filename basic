@@ -1,0 +1,407 @@
+# Java DSA – Basic Logic Revision
+
+## 1. Counting
+
+Use when the question asks **how many** times something occurs.
+
+```java
+count++;
+```
+
+### Pattern
+
+```java
+int count = 0;
+
+if (condition) {
+    count++;
+}
+```
+
+**Remember:**
+`count++` → increase count by 1.
+
+---
+
+## 2. Sum
+
+Use when the question asks for the **total/sum** of values or digits.
+
+```java
+sum += digit;
+```
+
+### Pattern
+
+```java
+int sum = 0;
+
+sum += digit;
+```
+
+Same as:
+
+```java
+sum = sum + digit;
+```
+
+**Remember:**
+`sum += digit` → add the current value to the total.
+
+---
+
+## 3. Maximum
+
+Use when you need to find the **largest value**.
+
+```java
+max = Math.max(max, digit);
+```
+
+### Pattern
+
+```java
+int max = Integer.MIN_VALUE;
+
+max = Math.max(max, digit);
+```
+
+`Math.max(a, b)` returns the larger of `a` and `b`.
+
+Example:
+
+```java
+max = Math.max(10, 7);
+```
+
+Result:
+
+```text
+10
+```
+
+**Remember:**
+`max = Math.max(max, value)` → keep the largest value seen so far.
+
+---
+
+## 4. Frequency
+
+Use when you need to find **how many times each value occurs**.
+
+For digits `0–9`:
+
+```java
+int[] frequency = new int[10];
+```
+
+Then:
+
+```java
+frequency[digit]++;
+```
+
+### Example
+
+For:
+
+```text
+112233
+```
+
+Frequency becomes:
+
+```text
+0 → 0
+1 → 2
+2 → 2
+3 → 2
+```
+
+**Remember:**
+
+```java
+frequency[value]++;
+```
+
+means:
+
+> Increase the count of this particular value.
+
+---
+
+# 5. Prime Number
+
+A prime number has **exactly two factors: 1 and itself**.
+
+### Code
+
+```java
+boolean prime = true;
+
+for (int i = 2; i * i <= n; i++) {
+    if (n % i == 0) {
+        prime = false;
+        break;
+    }
+}
+```
+
+### Important logic
+
+We start checking from:
+
+```java
+i = 2
+```
+
+and only check while:
+
+```java
+i * i <= n
+```
+
+If any number divides `n` exactly:
+
+```java
+n % i == 0
+```
+
+then `n` is **not prime**.
+
+### Why `i * i <= n`?
+
+We only need to check factors up to `√n`.
+
+Example:
+
+```text
+n = 25
+
+i = 2 → 25 % 2 != 0
+i = 3 → 25 % 3 != 0
+i = 4 → 25 % 4 != 0
+i = 5 → 25 % 5 == 0
+```
+
+Therefore:
+
+```text
+25 → Not Prime
+```
+
+### Important edge cases
+
+```text
+0 → Not Prime
+1 → Not Prime
+2 → Prime
+3 → Prime
+```
+
+For `n = 2`, the loop doesn't execute because:
+
+```text
+2 × 2 <= 2
+4 <= 2 → false
+```
+
+So `prime` remains `true`.
+
+---
+
+# 6. GCD
+
+**GCD = Greatest Common Divisor**
+
+It finds the largest number that divides both numbers.
+
+Example:
+
+```text
+12 and 18
+
+Factors of 12 → 1, 2, 3, 4, 6, 12
+Factors of 18 → 1, 2, 3, 6, 9, 18
+
+GCD = 6
+```
+
+### Euclidean Algorithm
+
+```java
+static int gcd(int a, int b) {
+    while (b != 0) {
+        int temp = a % b;
+        a = b;
+        b = temp;
+    }
+
+    return a;
+}
+```
+
+### Core logic
+
+```java
+a % b
+```
+
+Then:
+
+```text
+a = b
+b = remainder
+```
+
+Continue until:
+
+```text
+b = 0
+```
+
+Then `a` is the GCD.
+
+### Example: gcd(48, 18)
+
+```text
+48 % 18 = 12
+
+a = 18
+b = 12
+
+18 % 12 = 6
+
+a = 12
+b = 6
+
+12 % 6 = 0
+
+a = 6
+b = 0
+```
+
+Therefore:
+
+```text
+GCD = 6
+```
+
+**Remember the pattern:**
+
+```java
+temp = a % b;
+a = b;
+b = temp;
+```
+
+---
+
+# 7. LCM
+
+**LCM = Least Common Multiple**
+
+It finds the smallest positive number that is divisible by both numbers.
+
+Example:
+
+```text
+12 → 12, 24, 36, 48...
+18 → 18, 36, 54...
+
+LCM = 36
+```
+
+### Formula
+
+```text
+LCM(a, b) = (a × b) / GCD(a, b)
+```
+
+### Safe Java code
+
+```java
+static long lcm(int a, int b) {
+    return (long) a / gcd(a, b) * b;
+}
+```
+
+### Why `(long)`?
+
+Because:
+
+```java
+a * b
+```
+
+can overflow an `int`.
+
+So we divide first and then multiply:
+
+```java
+(long) a / gcd(a, b) * b
+```
+
+This is safer.
+
+### Relationship
+
+```text
+GCD × LCM = a × b
+```
+
+Therefore:
+
+```text
+LCM = (a × b) / GCD
+```
+
+---
+
+# ⭐ Quick Revision Table
+
+| Problem   | Main Logic                   |
+| --------- | ---------------------------- |
+| Count     | `count++`                    |
+| Sum       | `sum += value`               |
+| Maximum   | `max = Math.max(max, value)` |
+| Frequency | `frequency[value]++`         |
+| Prime     | `n % i == 0`                 |
+| GCD       | `a % b` repeatedly           |
+| LCM       | `(a / gcd(a,b)) * b`         |
+
+# 🧠 Remember These Patterns
+
+```java
+// COUNT
+count++;
+
+// SUM
+sum += value;
+
+// MAXIMUM
+max = Math.max(max, value);
+
+// FREQUENCY
+frequency[value]++;
+
+// PRIME
+for (int i = 2; i * i <= n; i++) {
+    if (n % i == 0) {
+        prime = false;
+        break;
+    }
+}
+
+// GCD
+while (b != 0) {
+    int temp = a % b;
+    a = b;
+    b = temp;
+}
+
+// LCM
+(long) a / gcd(a, b) * b;
+```
+
+These are **core DSA patterns**. Many beginner/intermediate problems are just combinations of these patterns.
